@@ -4,18 +4,61 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Purpose
 
-This is a study materials repository for the **AWS Certified AI Practitioner** exam. It contains lesson transcript files — not a software project.
+A study hub web application for the **AWS Certified AI Practitioner (AIF-C01)** exam, deployed on GitHub Pages. Contains both the source transcript files and a single-page study app with summaries, flashcards, and quizzes.
 
-## Structure
+**Live site:** https://nik1168.github.io/aws-ai-practitioner-study-hub/
 
-- `domain_1/` — Transcript files covering Domain 1 of the exam
-  - `Task_Statement_1.1_Lesson_{1-5}` — Basic AI concepts and terminologies (AI, ML, deep learning, NLP, generative AI, computer vision, use cases)
-  - `Task_Statement_1.2_Lesson_{1-5}` — Identify practical use cases for AI
-  - `Task_Statement_1.3_Lesson_{1-7}` — ML development lifecycle (data preparation, training, evaluation metrics like confusion matrix, AUC, MSE/RMSE, business metrics)
+## Architecture
 
-## Working With These Files
+Single HTML file with embedded CSS/JS. No build tools, no dependencies, no framework.
 
-- Transcripts are plain `.txt` files, each containing a single lesson
-- Content is continuous text (no markdown structure in most files; some later files use `===` headings)
-- When asked to quiz, summarize, or explain topics, reference the specific task statement and lesson number
-- Key exam topics covered: AI/ML fundamentals, AWS services (Bedrock, SageMaker), model evaluation metrics, responsible AI, and the ML pipeline
+```
+index.html          — Complete app (HTML + CSS + JS)
+data/domain1.js     — Domain 1 content (summaries, flashcards, quiz questions)
+domain_1/           — Source transcript files (17 lessons)
+```
+
+## Adding a New Domain
+
+1. Create `data/domain2.js` following the schema below
+2. Add `<script src="data/domain2.js"></script>` before the app script in `index.html`
+3. The domain tabs in the HTML are hardcoded — enable the corresponding tab by removing the `disabled` class
+
+### Data Schema
+
+```js
+window.DOMAINS = window.DOMAINS || {};
+window.DOMAINS["domain2"] = {
+  title: "Domain Title",
+  taskStatements: [
+    {
+      id: "2.1",
+      title: "Task statement title",
+      summary: {
+        keyPoints: [
+          { icon: "concept|service|definition|metric", text: "..." }
+        ]
+      },
+      flashcards: [
+        { front: "Question", back: "Answer" }
+      ],
+      quiz: [
+        {
+          question: "...",
+          options: ["A", "B", "C", "D"],
+          correct: 0,       // 0-based index of correct answer
+          explanation: "..." // Why the answer is correct
+        }
+      ]
+    }
+  ]
+};
+```
+
+Icon values: `concept` (general concepts), `service` (AWS services), `definition` (key terms), `metric` (evaluation metrics).
+
+## Source Transcripts
+
+- `domain_1/Task_Statement_1.1_Lesson_{1-5}` — AI/ML/deep learning fundamentals, data types, training, overfitting/bias, neural networks, generative AI
+- `domain_1/Task_Statement_1.2_Lesson_{1-5}` — When to use AI, ML problem types, AWS pre-trained services, SageMaker, real-world case studies
+- `domain_1/Task_Statement_1.3_Lesson_{1-7}` — ML pipeline, data prep, training/tuning, deployment, monitoring/MLOps, evaluation metrics, business metrics
