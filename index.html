@@ -4,13 +4,1706 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AWS AI Practitioner Study Hub</title>
+    <style>
+        /* ============================================================
+           CSS Custom Properties
+           ============================================================ */
+        :root {
+            --navy: #232f3e;
+            --navy-light: #37475a;
+            --orange: #ff9900;
+            --orange-hover: #ec7211;
+            --teal: #1a9988;
+            --bg: #f5f7fa;
+            --card: #ffffff;
+            --text: #16191f;
+            --text-light: #545b64;
+            --success: #1d8102;
+            --error: #d13212;
+            --border: #e1e4e8;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.12);
+            --radius: 10px;
+            --radius-sm: 6px;
+            --transition: 0.25s ease;
+        }
+
+        /* ============================================================
+           Reset & Base
+           ============================================================ */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ============================================================
+           Container
+           ============================================================ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ============================================================
+           Header
+           ============================================================ */
+        header {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+            color: #fff;
+            padding: 32px 0 28px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(255, 153, 0, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            position: relative;
+        }
+
+        header h1 .accent {
+            color: var(--orange);
+        }
+
+        header p {
+            margin-top: 6px;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 400;
+            position: relative;
+        }
+
+        /* ============================================================
+           Domain Tabs
+           ============================================================ */
+        .domain-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 0;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .domain-tab {
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: 2px solid var(--border);
+            background: var(--card);
+            color: var(--text-light);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .domain-tab:hover:not(.disabled) {
+            border-color: var(--orange);
+            color: var(--orange);
+        }
+
+        .domain-tab.active {
+            background: var(--orange);
+            border-color: var(--orange);
+            color: #fff;
+        }
+
+        .domain-tab.disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .domain-tab.disabled:hover::after {
+            content: 'Coming Soon';
+            position: absolute;
+            bottom: -32px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--navy);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-weight: 500;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        /* ============================================================
+           Mode Tabs
+           ============================================================ */
+        .mode-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            padding: 0;
+            background: var(--card);
+            border-bottom: 2px solid var(--border);
+        }
+
+        .mode-tab {
+            padding: 14px 32px;
+            border: none;
+            background: none;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            position: relative;
+        }
+
+        .mode-tab::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--orange);
+            border-radius: 3px 3px 0 0;
+            transform: scaleX(0);
+            transition: transform var(--transition);
+        }
+
+        .mode-tab:hover {
+            color: var(--text);
+        }
+
+        .mode-tab.active {
+            color: var(--orange);
+        }
+
+        .mode-tab.active::after {
+            transform: scaleX(1);
+        }
+
+        /* ============================================================
+           Filter Pills
+           ============================================================ */
+        .filter-pills {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 0;
+            flex-wrap: wrap;
+        }
+
+        .filter-pill {
+            padding: 6px 16px;
+            border-radius: 16px;
+            border: 1.5px solid var(--border);
+            background: var(--card);
+            color: var(--text-light);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .filter-pill:hover {
+            border-color: var(--orange);
+            color: var(--orange);
+        }
+
+        .filter-pill.active {
+            background: var(--orange);
+            border-color: var(--orange);
+            color: #fff;
+        }
+
+        /* ============================================================
+           Main Content
+           ============================================================ */
+        main {
+            padding: 8px 0 48px;
+        }
+
+        .section-hidden {
+            display: none !important;
+        }
+
+        /* ============================================================
+           Summaries — Accordion
+           ============================================================ */
+        .accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .accordion-item {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: box-shadow var(--transition);
+        }
+
+        .accordion-item:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .accordion-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 24px;
+            cursor: pointer;
+            user-select: none;
+            transition: background var(--transition);
+        }
+
+        .accordion-header:hover {
+            background: rgba(0, 0, 0, 0.015);
+        }
+
+        .accordion-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .accordion-id {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 40px;
+            height: 28px;
+            padding: 0 10px;
+            background: var(--navy);
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 700;
+            border-radius: 14px;
+            flex-shrink: 0;
+        }
+
+        .accordion-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--navy);
+        }
+
+        .accordion-chevron {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+            color: var(--text-light);
+            margin-left: 12px;
+        }
+
+        .accordion-item.open .accordion-chevron {
+            transform: rotate(180deg);
+        }
+
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .accordion-item.open .accordion-body {
+            max-height: 5000px;
+        }
+
+        .accordion-content {
+            padding: 0 24px 24px;
+        }
+
+        .key-point {
+            display: flex;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+            align-items: flex-start;
+        }
+
+        .key-point:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .key-point-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: #f0f4f8;
+        }
+
+        .key-point-icon.concept { background: #fef3e0; }
+        .key-point-icon.service { background: #e0f7f5; }
+        .key-point-icon.definition { background: #e8edf3; }
+        .key-point-icon.metric { background: #fce4ec; }
+
+        .key-point-text {
+            font-size: 0.92rem;
+            line-height: 1.65;
+            color: var(--text);
+        }
+
+        /* ============================================================
+           Flashcards
+           ============================================================ */
+        #flashcards {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .flashcard-controls-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .flashcard-progress-text {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .flashcard-progress-bar {
+            width: 100%;
+            max-width: 500px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .flashcard-progress-fill {
+            height: 100%;
+            background: var(--orange);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .flashcard-scene {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 560px;
+            min-height: 320px;
+            margin-bottom: 24px;
+            cursor: pointer;
+        }
+
+        .flashcard-card {
+            width: 100%;
+            min-height: 320px;
+            position: relative;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .flashcard-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-face {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: 320px;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 36px;
+            text-align: center;
+        }
+
+        .flashcard-front {
+            z-index: 2;
+        }
+
+        .flashcard-front::before {
+            content: 'Q';
+            position: absolute;
+            top: 16px;
+            left: 20px;
+            width: 28px;
+            height: 28px;
+            background: var(--navy);
+            color: #fff;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flashcard-back {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-back::before {
+            content: 'A';
+            position: absolute;
+            top: 16px;
+            left: 20px;
+            width: 28px;
+            height: 28px;
+            background: var(--teal);
+            color: #fff;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flashcard-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-light);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .flashcard-text {
+            font-size: 1.1rem;
+            line-height: 1.65;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .flashcard-back .flashcard-text {
+            font-size: 0.98rem;
+            font-weight: 400;
+        }
+
+        .flashcard-flip-hint {
+            position: absolute;
+            bottom: 16px;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            opacity: 0.6;
+        }
+
+        .flashcard-nav {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .flashcard-nav-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+        }
+
+        .flashcard-nav-btn:hover {
+            border-color: var(--orange);
+            color: var(--orange);
+            background: #fff7eb;
+        }
+
+        .flashcard-action-btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .btn {
+            padding: 10px 22px;
+            border-radius: var(--radius-sm);
+            border: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: var(--orange);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--orange-hover);
+        }
+
+        .btn-secondary {
+            background: var(--card);
+            color: var(--text);
+            border: 1.5px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--navy-light);
+            background: #f8f9fa;
+        }
+
+        /* ============================================================
+           Quiz
+           ============================================================ */
+        #quiz {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .quiz-progress-container {
+            width: 100%;
+            max-width: 700px;
+            margin-bottom: 24px;
+        }
+
+        .quiz-progress-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .quiz-progress-text {
+            font-size: 0.88rem;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .quiz-progress-bar {
+            width: 100%;
+            height: 5px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .quiz-progress-fill {
+            height: 100%;
+            background: var(--orange);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .quiz-card {
+            width: 100%;
+            max-width: 700px;
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            padding: 32px;
+        }
+
+        .quiz-task-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #fff;
+            background: var(--navy);
+            margin-bottom: 12px;
+        }
+
+        .quiz-question {
+            font-size: 1.08rem;
+            font-weight: 600;
+            line-height: 1.55;
+            color: var(--text);
+            margin-bottom: 24px;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .quiz-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px 18px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--card);
+            cursor: pointer;
+            transition: all var(--transition);
+            text-align: left;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            color: var(--text);
+        }
+
+        .quiz-option:hover:not(.disabled) {
+            border-color: var(--orange);
+            background: #fff7eb;
+        }
+
+        .quiz-option .option-letter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--bg);
+            font-weight: 700;
+            font-size: 0.82rem;
+            color: var(--text-light);
+            flex-shrink: 0;
+            transition: all var(--transition);
+        }
+
+        .quiz-option:hover:not(.disabled) .option-letter {
+            background: var(--orange);
+            color: #fff;
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success);
+            background: #e8f5e2;
+        }
+
+        .quiz-option.correct .option-letter {
+            background: var(--success);
+            color: #fff;
+        }
+
+        .quiz-option.wrong {
+            border-color: var(--error);
+            background: #fde8e4;
+        }
+
+        .quiz-option.wrong .option-letter {
+            background: var(--error);
+            color: #fff;
+        }
+
+        .quiz-option.disabled {
+            cursor: default;
+        }
+
+        .quiz-option.disabled:not(.correct):not(.wrong) {
+            opacity: 0.5;
+        }
+
+        .quiz-explanation {
+            margin-top: 20px;
+            padding: 16px 20px;
+            border-radius: var(--radius-sm);
+            background: #f0f7ff;
+            border-left: 4px solid var(--navy);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text);
+            animation: slideDown 0.3s ease;
+        }
+
+        .quiz-explanation-label {
+            font-weight: 700;
+            color: var(--navy);
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Quiz Start Screen */
+        .quiz-start {
+            text-align: center;
+            padding: 48px 32px;
+        }
+
+        .quiz-start-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+
+        .quiz-start h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        .quiz-start p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+        }
+
+        /* Quiz Results */
+        .quiz-results {
+            text-align: center;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .quiz-results-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            padding: 40px 32px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-score-ring {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .quiz-score-ring::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 6px solid var(--border);
+        }
+
+        .quiz-score-ring::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 6px solid transparent;
+            border-top-color: var(--orange);
+            border-right-color: var(--orange);
+            transform: rotate(-45deg);
+        }
+
+        .quiz-score-ring.high::after {
+            border-color: var(--success);
+        }
+
+        .quiz-score-ring.low::after {
+            border-color: var(--error);
+        }
+
+        .quiz-score-pct {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--navy);
+            line-height: 1;
+        }
+
+        .quiz-score-label {
+            font-size: 0.82rem;
+            color: var(--text-light);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        .quiz-score-fraction {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 24px;
+        }
+
+        .quiz-breakdown {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            text-align: left;
+        }
+
+        .quiz-breakdown th {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-light);
+            padding: 8px 12px;
+            border-bottom: 2px solid var(--border);
+            font-weight: 700;
+        }
+
+        .quiz-breakdown td {
+            padding: 10px 12px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .quiz-breakdown td:last-child {
+            font-weight: 700;
+        }
+
+        .quiz-results-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* ============================================================
+           Footer
+           ============================================================ */
+        footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--text-light);
+            font-size: 0.82rem;
+            border-top: 1px solid var(--border);
+            background: var(--card);
+        }
+
+        footer a {
+            color: var(--orange);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ============================================================
+           Keyboard Shortcut Hint
+           ============================================================ */
+        .kbd-hint {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .kbd-hint span {
+            font-size: 0.78rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        kbd {
+            display: inline-block;
+            padding: 2px 7px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-family: inherit;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        /* ============================================================
+           Responsive
+           ============================================================ */
+        @media (max-width: 640px) {
+            header {
+                padding: 24px 0 20px;
+            }
+
+            header h1 {
+                font-size: 1.35rem;
+            }
+
+            .domain-tab {
+                padding: 6px 14px;
+                font-size: 0.78rem;
+            }
+
+            .mode-tab {
+                padding: 12px 18px;
+                font-size: 0.88rem;
+            }
+
+            .accordion-header {
+                padding: 14px 16px;
+            }
+
+            .accordion-content {
+                padding: 0 16px 16px;
+            }
+
+            .accordion-title {
+                font-size: 0.92rem;
+            }
+
+            .flashcard-scene {
+                min-height: 280px;
+            }
+
+            .flashcard-face {
+                min-height: 280px;
+                padding: 32px 24px;
+            }
+
+            .flashcard-text {
+                font-size: 1rem;
+            }
+
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+
+            .quiz-card {
+                padding: 24px 20px;
+            }
+
+            .quiz-question {
+                font-size: 0.98rem;
+            }
+
+            .quiz-option {
+                font-size: 0.88rem;
+                padding: 14px 16px;
+            }
+
+            .kbd-hint {
+                display: none;
+            }
+        }
+
+        @media (min-width: 641px) and (max-width: 900px) {
+            .flashcard-face {
+                padding: 36px 30px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>AWS AI Practitioner Study Hub</h1>
-    <p>Coming soon...</p>
+
+    <!-- ============================================================
+         Header
+         ============================================================ -->
+    <header>
+        <div class="container">
+            <h1><span class="accent">AWS</span> AI Practitioner Study Hub</h1>
+            <p>Master the AIF-C01 exam with summaries, flashcards, and quizzes</p>
+        </div>
+    </header>
+
+    <!-- ============================================================
+         Domain Tabs
+         ============================================================ -->
+    <nav class="domain-tabs" id="domain-tabs">
+        <button class="domain-tab active" data-domain="domain1">Domain 1</button>
+        <button class="domain-tab disabled" data-domain="domain2">Domain 2</button>
+        <button class="domain-tab disabled" data-domain="domain3">Domain 3</button>
+        <button class="domain-tab disabled" data-domain="domain4">Domain 4</button>
+    </nav>
+
+    <!-- ============================================================
+         Mode Tabs
+         ============================================================ -->
+    <nav class="mode-tabs" id="mode-tabs">
+        <button class="mode-tab active" data-mode="summaries">Summaries</button>
+        <button class="mode-tab" data-mode="flashcards">Flashcards</button>
+        <button class="mode-tab" data-mode="quiz">Quizzes</button>
+    </nav>
+
+    <!-- ============================================================
+         Filter Pills
+         ============================================================ -->
+    <div class="container">
+        <div class="filter-pills" id="filter-pills">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+
+    <!-- ============================================================
+         Main Content
+         ============================================================ -->
+    <main class="container">
+        <!-- Summaries Section -->
+        <section id="summaries">
+            <!-- Populated by JS -->
+        </section>
+
+        <!-- Flashcards Section -->
+        <section id="flashcards" class="section-hidden">
+            <!-- Populated by JS -->
+        </section>
+
+        <!-- Quiz Section -->
+        <section id="quiz" class="section-hidden">
+            <!-- Populated by JS -->
+        </section>
+    </main>
+
+    <!-- ============================================================
+         Footer
+         ============================================================ -->
+    <footer>
+        <p>AWS AI Practitioner Study Hub &mdash; Built for the AIF-C01 certification exam</p>
+    </footer>
+
+    <!-- ============================================================
+         Data
+         ============================================================ -->
     <script src="data/domain1.js"></script>
+
+    <!-- ============================================================
+         Application Logic
+         ============================================================ -->
     <script>
-        console.log('Domains loaded:', window.DOMAINS);
+    (function () {
+        'use strict';
+
+        /* ==============================================================
+           Icon Map
+           ============================================================== */
+        const ICON_MAP = {
+            concept: '\u{1F4A1}',
+            service: '\u2601\uFE0F',
+            definition: '\u{1F4D6}',
+            metric: '\u{1F4CA}'
+        };
+
+        /* ==============================================================
+           State
+           ============================================================== */
+        const state = {
+            currentDomain: 'domain1',
+            currentMode: 'summaries',
+            currentFilter: 'all',
+            flashcardIndex: 0,
+            flashcardFlipped: false,
+            flashcards: [],
+            quizIndex: 0,
+            quizAnswers: [],
+            quizSubmitted: false,
+            quizQuestions: [],
+            quizStarted: false,
+            quizFinished: false
+        };
+
+        /* ==============================================================
+           Helpers
+           ============================================================== */
+        function getDomain() {
+            return window.DOMAINS && window.DOMAINS[state.currentDomain];
+        }
+
+        function getFilteredStatements() {
+            const domain = getDomain();
+            if (!domain) return [];
+            if (state.currentFilter === 'all') return domain.taskStatements;
+            return domain.taskStatements.filter(function (ts) {
+                return ts.id === state.currentFilter;
+            });
+        }
+
+        function shuffleArray(arr) {
+            var a = arr.slice();
+            for (var i = a.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var tmp = a[i];
+                a[i] = a[j];
+                a[j] = tmp;
+            }
+            return a;
+        }
+
+        function $(sel) { return document.querySelector(sel); }
+        function $$(sel) { return document.querySelectorAll(sel); }
+
+        /* ==============================================================
+           Domain Switching
+           ============================================================== */
+        function switchDomain(key) {
+            if (!window.DOMAINS || !window.DOMAINS[key]) return;
+            state.currentDomain = key;
+            state.currentFilter = 'all';
+            state.flashcardIndex = 0;
+            state.flashcardFlipped = false;
+            state.quizIndex = 0;
+            state.quizAnswers = [];
+            state.quizSubmitted = false;
+            state.quizQuestions = [];
+            state.quizStarted = false;
+            state.quizFinished = false;
+
+            $$('.domain-tab').forEach(function (tab) {
+                tab.classList.toggle('active', tab.dataset.domain === key);
+            });
+
+            renderFilterPills();
+            switchMode(state.currentMode);
+        }
+
+        /* ==============================================================
+           Mode Switching
+           ============================================================== */
+        function switchMode(mode) {
+            state.currentMode = mode;
+
+            $$('.mode-tab').forEach(function (tab) {
+                tab.classList.toggle('active', tab.dataset.mode === mode);
+            });
+
+            ['summaries', 'flashcards', 'quiz'].forEach(function (s) {
+                var el = document.getElementById(s);
+                if (el) el.classList.toggle('section-hidden', s !== mode);
+            });
+
+            if (mode === 'summaries') renderSummaries();
+            else if (mode === 'flashcards') initFlashcards();
+            else if (mode === 'quiz') renderQuizStart();
+        }
+
+        /* ==============================================================
+           Filter Pills
+           ============================================================== */
+        function renderFilterPills() {
+            var domain = getDomain();
+            if (!domain) return;
+            var container = $('#filter-pills');
+            var html = '<button class="filter-pill active" data-filter="all">All</button>';
+            domain.taskStatements.forEach(function (ts) {
+                html += '<button class="filter-pill" data-filter="' + ts.id + '">' + ts.id + '</button>';
+            });
+            container.innerHTML = html;
+
+            container.querySelectorAll('.filter-pill').forEach(function (pill) {
+                pill.addEventListener('click', function () {
+                    setFilter(this.dataset.filter);
+                });
+            });
+        }
+
+        function setFilter(filter) {
+            state.currentFilter = filter;
+            $$('.filter-pill').forEach(function (pill) {
+                pill.classList.toggle('active', pill.dataset.filter === filter);
+            });
+
+            if (state.currentMode === 'summaries') renderSummaries();
+            else if (state.currentMode === 'flashcards') initFlashcards();
+            else if (state.currentMode === 'quiz') {
+                state.quizStarted = false;
+                state.quizFinished = false;
+                renderQuizStart();
+            }
+        }
+
+        /* ==============================================================
+           Summaries — Accordion
+           ============================================================== */
+        function renderSummaries() {
+            var stmts = getFilteredStatements();
+            var container = $('#summaries');
+            var html = '<div class="accordion">';
+
+            stmts.forEach(function (ts, idx) {
+                var openClass = idx === 0 ? ' open' : '';
+                html += '<div class="accordion-item' + openClass + '">';
+                html += '<div class="accordion-header" data-accordion="' + ts.id + '">';
+                html += '<div class="accordion-header-left">';
+                html += '<span class="accordion-id">' + ts.id + '</span>';
+                html += '<span class="accordion-title">' + escapeHtml(ts.title) + '</span>';
+                html += '</div>';
+                html += '<svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+                html += '</div>';
+                html += '<div class="accordion-body"><div class="accordion-content">';
+
+                ts.summary.keyPoints.forEach(function (kp) {
+                    var icon = ICON_MAP[kp.icon] || '\u{1F4A1}';
+                    html += '<div class="key-point">';
+                    html += '<span class="key-point-icon ' + kp.icon + '">' + icon + '</span>';
+                    html += '<span class="key-point-text">' + escapeHtml(kp.text) + '</span>';
+                    html += '</div>';
+                });
+
+                html += '</div></div></div>';
+            });
+
+            html += '</div>';
+            container.innerHTML = html;
+
+            container.querySelectorAll('.accordion-header').forEach(function (header) {
+                header.addEventListener('click', function () {
+                    var item = this.closest('.accordion-item');
+                    item.classList.toggle('open');
+                });
+            });
+        }
+
+        function escapeHtml(str) {
+            var div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        /* ==============================================================
+           Flashcards
+           ============================================================== */
+        function initFlashcards() {
+            var stmts = getFilteredStatements();
+            var cards = [];
+            stmts.forEach(function (ts) {
+                ts.flashcards.forEach(function (fc) {
+                    cards.push({ front: fc.front, back: fc.back, taskId: ts.id });
+                });
+            });
+            state.flashcards = cards;
+            state.flashcardIndex = 0;
+            state.flashcardFlipped = false;
+            renderFlashcard();
+        }
+
+        function renderFlashcard() {
+            var container = $('#flashcards');
+            var cards = state.flashcards;
+            if (!cards.length) {
+                container.innerHTML = '<div class="quiz-card" style="text-align:center;padding:48px"><p style="color:var(--text-light)">No flashcards available for this filter.</p></div>';
+                return;
+            }
+
+            var idx = state.flashcardIndex;
+            var card = cards[idx];
+            var total = cards.length;
+            var pct = ((idx + 1) / total * 100).toFixed(0);
+            var flippedClass = state.flashcardFlipped ? ' flipped' : '';
+
+            var html = '';
+
+            // Progress text
+            html += '<div class="flashcard-controls-top">';
+            html += '<span class="flashcard-progress-text">Card ' + (idx + 1) + ' of ' + total + '</span>';
+            html += '</div>';
+
+            // Progress bar
+            html += '<div class="flashcard-progress-bar"><div class="flashcard-progress-fill" style="width:' + pct + '%"></div></div>';
+
+            // Card
+            html += '<div class="flashcard-scene" id="flashcard-scene">';
+            html += '<div class="flashcard-card' + flippedClass + '" id="flashcard-card">';
+            html += '<div class="flashcard-face flashcard-front">';
+            html += '<span class="flashcard-label">Question</span>';
+            html += '<span class="flashcard-text">' + escapeHtml(card.front) + '</span>';
+            html += '<span class="flashcard-flip-hint">Click or press Space to flip</span>';
+            html += '</div>';
+            html += '<div class="flashcard-face flashcard-back">';
+            html += '<span class="flashcard-label">Answer</span>';
+            html += '<span class="flashcard-text">' + escapeHtml(card.back) + '</span>';
+            html += '<span class="flashcard-flip-hint">Click or press Space to flip back</span>';
+            html += '</div>';
+            html += '</div>';
+            html += '</div>';
+
+            // Nav
+            html += '<div class="flashcard-nav">';
+            html += '<button class="flashcard-nav-btn" id="fc-prev" title="Previous card">';
+            html += '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>';
+            html += '</button>';
+            html += '<button class="flashcard-nav-btn" id="fc-next" title="Next card">';
+            html += '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>';
+            html += '</button>';
+            html += '</div>';
+
+            // Action buttons
+            html += '<div class="flashcard-action-btns">';
+            html += '<button class="btn btn-secondary" id="fc-shuffle">Shuffle</button>';
+            html += '<button class="btn btn-secondary" id="fc-reset">Reset</button>';
+            html += '</div>';
+
+            // Keyboard hints
+            html += '<div class="kbd-hint">';
+            html += '<span><kbd>\u2190</kbd> Previous</span>';
+            html += '<span><kbd>Space</kbd> Flip</span>';
+            html += '<span><kbd>\u2192</kbd> Next</span>';
+            html += '</div>';
+
+            container.innerHTML = html;
+
+            // Event listeners
+            $('#flashcard-scene').addEventListener('click', flipCard);
+            $('#fc-prev').addEventListener('click', prevCard);
+            $('#fc-next').addEventListener('click', nextCard);
+            $('#fc-shuffle').addEventListener('click', shuffleCards);
+            $('#fc-reset').addEventListener('click', resetFlashcards);
+        }
+
+        function flipCard() {
+            state.flashcardFlipped = !state.flashcardFlipped;
+            var cardEl = $('#flashcard-card');
+            if (cardEl) {
+                cardEl.classList.toggle('flipped', state.flashcardFlipped);
+            }
+        }
+
+        function nextCard() {
+            state.flashcardIndex = (state.flashcardIndex + 1) % state.flashcards.length;
+            state.flashcardFlipped = false;
+            renderFlashcard();
+        }
+
+        function prevCard() {
+            state.flashcardIndex = (state.flashcardIndex - 1 + state.flashcards.length) % state.flashcards.length;
+            state.flashcardFlipped = false;
+            renderFlashcard();
+        }
+
+        function shuffleCards() {
+            state.flashcards = shuffleArray(state.flashcards);
+            state.flashcardIndex = 0;
+            state.flashcardFlipped = false;
+            renderFlashcard();
+        }
+
+        function resetFlashcards() {
+            initFlashcards();
+        }
+
+        /* ==============================================================
+           Quiz
+           ============================================================== */
+        function renderQuizStart() {
+            var container = $('#quiz');
+            var stmts = getFilteredStatements();
+            var totalQ = 0;
+            stmts.forEach(function (ts) { totalQ += ts.quiz.length; });
+
+            var html = '<div class="quiz-card quiz-start">';
+            html += '<div class="quiz-start-icon">\u{1F4DD}</div>';
+            html += '<h3>Ready to Test Your Knowledge?</h3>';
+            html += '<p>' + totalQ + ' questions from ' + (state.currentFilter === 'all' ? 'all task statements' : 'Task ' + state.currentFilter) + '</p>';
+            html += '<button class="btn btn-primary" id="quiz-start-btn">Start Quiz</button>';
+            html += '</div>';
+
+            container.innerHTML = html;
+            state.quizStarted = false;
+            state.quizFinished = false;
+
+            $('#quiz-start-btn').addEventListener('click', startQuiz);
+        }
+
+        function startQuiz() {
+            var stmts = getFilteredStatements();
+            var questions = [];
+            stmts.forEach(function (ts) {
+                ts.quiz.forEach(function (q) {
+                    questions.push({
+                        question: q.question,
+                        options: q.options,
+                        correct: q.correct,
+                        explanation: q.explanation,
+                        taskId: ts.id,
+                        taskTitle: ts.title
+                    });
+                });
+            });
+
+            state.quizQuestions = shuffleArray(questions);
+            state.quizIndex = 0;
+            state.quizAnswers = [];
+            state.quizSubmitted = false;
+            state.quizStarted = true;
+            state.quizFinished = false;
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            var container = $('#quiz');
+            var questions = state.quizQuestions;
+            var idx = state.quizIndex;
+
+            if (idx >= questions.length) {
+                renderQuizResults();
+                return;
+            }
+
+            var q = questions[idx];
+            var total = questions.length;
+            var pct = ((idx) / total * 100).toFixed(0);
+            var letters = ['A', 'B', 'C', 'D'];
+
+            var html = '';
+
+            // Progress
+            html += '<div class="quiz-progress-container">';
+            html += '<div class="quiz-progress-top">';
+            html += '<span class="quiz-progress-text">Question ' + (idx + 1) + ' of ' + total + '</span>';
+            html += '<span class="quiz-progress-text">' + pct + '%</span>';
+            html += '</div>';
+            html += '<div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:' + pct + '%"></div></div>';
+            html += '</div>';
+
+            // Question card
+            html += '<div class="quiz-card">';
+            html += '<span class="quiz-task-badge">Task ' + q.taskId + '</span>';
+            html += '<div class="quiz-question">' + escapeHtml(q.question) + '</div>';
+            html += '<div class="quiz-options" id="quiz-options">';
+
+            q.options.forEach(function (opt, i) {
+                html += '<button class="quiz-option" data-index="' + i + '">';
+                html += '<span class="option-letter">' + letters[i] + '</span>';
+                html += '<span>' + escapeHtml(opt) + '</span>';
+                html += '</button>';
+            });
+
+            html += '</div>';
+            html += '<div id="quiz-feedback"></div>';
+            html += '</div>';
+
+            container.innerHTML = html;
+
+            // Bind option clicks
+            $$('.quiz-option').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    if (state.quizSubmitted) return;
+                    selectAnswer(parseInt(this.dataset.index, 10));
+                });
+            });
+        }
+
+        function selectAnswer(index) {
+            if (state.quizSubmitted) return;
+            state.quizSubmitted = true;
+
+            var q = state.quizQuestions[state.quizIndex];
+            var isCorrect = index === q.correct;
+
+            state.quizAnswers.push({
+                questionIndex: state.quizIndex,
+                selected: index,
+                correct: q.correct,
+                isCorrect: isCorrect,
+                taskId: q.taskId
+            });
+
+            // Show correct/wrong on options
+            var options = $$('.quiz-option');
+            options.forEach(function (opt) {
+                opt.classList.add('disabled');
+                var optIdx = parseInt(opt.dataset.index, 10);
+                if (optIdx === q.correct) {
+                    opt.classList.add('correct');
+                }
+                if (optIdx === index && !isCorrect) {
+                    opt.classList.add('wrong');
+                }
+            });
+
+            // Show explanation
+            var feedbackEl = $('#quiz-feedback');
+            var feedbackHtml = '<div class="quiz-explanation">';
+            feedbackHtml += '<span class="quiz-explanation-label">' + (isCorrect ? '\u2705 Correct!' : '\u274C Incorrect') + '</span>';
+            feedbackHtml += escapeHtml(q.explanation);
+            feedbackHtml += '</div>';
+            feedbackEl.innerHTML = feedbackHtml;
+
+            // Auto-advance after 2s
+            setTimeout(function () {
+                state.quizIndex++;
+                state.quizSubmitted = false;
+                renderQuizQuestion();
+            }, 2000);
+        }
+
+        function renderQuizResults() {
+            state.quizFinished = true;
+            var container = $('#quiz');
+            var answers = state.quizAnswers;
+            var total = answers.length;
+            var correctCount = answers.filter(function (a) { return a.isCorrect; }).length;
+            var pct = total > 0 ? Math.round(correctCount / total * 100) : 0;
+            var wrongCount = total - correctCount;
+
+            // Determine score ring class
+            var ringClass = '';
+            if (pct >= 70) ringClass = ' high';
+            else if (pct < 50) ringClass = ' low';
+
+            // Breakdown by task statement
+            var breakdown = {};
+            answers.forEach(function (a) {
+                if (!breakdown[a.taskId]) {
+                    breakdown[a.taskId] = { total: 0, correct: 0 };
+                }
+                breakdown[a.taskId].total++;
+                if (a.isCorrect) breakdown[a.taskId].correct++;
+            });
+
+            var html = '<div class="quiz-results">';
+            html += '<div class="quiz-results-card">';
+
+            // Score ring
+            html += '<div class="quiz-score-ring' + ringClass + '">';
+            html += '<span class="quiz-score-pct">' + pct + '%</span>';
+            html += '<span class="quiz-score-label">Score</span>';
+            html += '</div>';
+
+            html += '<div class="quiz-score-fraction">' + correctCount + ' of ' + total + ' correct</div>';
+
+            // Breakdown table
+            html += '<table class="quiz-breakdown">';
+            html += '<thead><tr><th>Task</th><th>Correct</th><th>Total</th><th>Score</th></tr></thead>';
+            html += '<tbody>';
+            Object.keys(breakdown).sort().forEach(function (taskId) {
+                var b = breakdown[taskId];
+                var taskPct = Math.round(b.correct / b.total * 100);
+                var color = taskPct >= 70 ? 'var(--success)' : (taskPct < 50 ? 'var(--error)' : 'var(--orange)');
+                html += '<tr>';
+                html += '<td>Task ' + taskId + '</td>';
+                html += '<td>' + b.correct + '</td>';
+                html += '<td>' + b.total + '</td>';
+                html += '<td style="color:' + color + '">' + taskPct + '%</td>';
+                html += '</tr>';
+            });
+            html += '</tbody></table>';
+
+            html += '</div>'; // end results-card
+
+            // Action buttons
+            html += '<div class="quiz-results-actions">';
+            html += '<button class="btn btn-primary" id="quiz-retry">Try Again</button>';
+            if (wrongCount > 0) {
+                html += '<button class="btn btn-secondary" id="quiz-review-mistakes">Review Mistakes (' + wrongCount + ')</button>';
+            }
+            html += '</div>';
+
+            html += '</div>'; // end quiz-results
+
+            container.innerHTML = html;
+
+            $('#quiz-retry').addEventListener('click', function () {
+                startQuiz();
+            });
+
+            var reviewBtn = $('#quiz-review-mistakes');
+            if (reviewBtn) {
+                reviewBtn.addEventListener('click', function () {
+                    reviewMistakes();
+                });
+            }
+        }
+
+        function reviewMistakes() {
+            var wrongAnswers = state.quizAnswers.filter(function (a) { return !a.isCorrect; });
+            var wrongQuestions = wrongAnswers.map(function (a) {
+                return state.quizQuestions[a.questionIndex];
+            });
+
+            state.quizQuestions = shuffleArray(wrongQuestions);
+            state.quizIndex = 0;
+            state.quizAnswers = [];
+            state.quizSubmitted = false;
+            state.quizFinished = false;
+            renderQuizQuestion();
+        }
+
+        /* ==============================================================
+           Keyboard Listeners
+           ============================================================== */
+        document.addEventListener('keydown', function (e) {
+            if (state.currentMode !== 'flashcards') return;
+            if (!state.flashcards.length) return;
+
+            if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                nextCard();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevCard();
+            } else if (e.key === ' ' || e.key === 'Spacebar') {
+                e.preventDefault();
+                flipCard();
+            }
+        });
+
+        /* ==============================================================
+           Event Delegation — Domain Tabs
+           ============================================================== */
+        $('#domain-tabs').addEventListener('click', function (e) {
+            var tab = e.target.closest('.domain-tab');
+            if (!tab) return;
+            if (tab.classList.contains('disabled')) return;
+            switchDomain(tab.dataset.domain);
+        });
+
+        /* ==============================================================
+           Event Delegation — Mode Tabs
+           ============================================================== */
+        $('#mode-tabs').addEventListener('click', function (e) {
+            var tab = e.target.closest('.mode-tab');
+            if (!tab) return;
+            switchMode(tab.dataset.mode);
+        });
+
+        /* ==============================================================
+           Initialize
+           ============================================================== */
+        document.addEventListener('DOMContentLoaded', function () {
+            switchDomain('domain1');
+            switchMode('summaries');
+        });
+
+    })();
     </script>
 </body>
 </html>
