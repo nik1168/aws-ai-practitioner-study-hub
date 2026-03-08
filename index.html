@@ -378,6 +378,33 @@
             color: var(--text);
         }
 
+        .key-point-diagram {
+            margin-top: 10px;
+            background: #f8f9fb;
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            overflow-x: auto;
+        }
+
+        .key-point-diagram .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+
+        .flashcard-diagram {
+            margin-top: 12px;
+            background: #f8f9fb;
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            overflow-x: auto;
+            font-size: 0.85rem;
+        }
+
+        .flashcard-diagram .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+
         /* ============================================================
            Flashcards
            ============================================================ */
@@ -1104,6 +1131,9 @@
     <!-- ============================================================
          Data
          ============================================================ -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: false, theme: 'neutral', securityLevel: 'loose' });</script>
+
     <script src="data/domain1.js"></script>
     <script src="data/domain2.js"></script>
 
@@ -1276,6 +1306,9 @@
                     html += '<div class="key-point">';
                     html += '<span class="key-point-icon ' + kp.icon + '">' + icon + '</span>';
                     html += '<span class="key-point-text">' + escapeHtml(kp.text) + '</span>';
+                    if (kp.diagram) {
+                        html += '<div class="key-point-diagram"><pre class="mermaid">' + kp.diagram + '</pre></div>';
+                    }
                     html += '</div>';
                 });
 
@@ -1291,6 +1324,10 @@
                     item.classList.toggle('open');
                 });
             });
+
+            if (container.querySelector('.mermaid')) {
+                mermaid.run({ nodes: container.querySelectorAll('.mermaid') });
+            }
         }
 
         function escapeHtml(str) {
@@ -1307,7 +1344,7 @@
             var cards = [];
             stmts.forEach(function (ts) {
                 ts.flashcards.forEach(function (fc) {
-                    cards.push({ front: fc.front, back: fc.back, taskId: ts.id });
+                    cards.push({ front: fc.front, back: fc.back, taskId: ts.id, frontDiagram: fc.frontDiagram, backDiagram: fc.backDiagram });
                 });
             });
             state.flashcards = cards;
@@ -1346,11 +1383,17 @@
             html += '<div class="flashcard-face flashcard-front">';
             html += '<span class="flashcard-label">Question</span>';
             html += '<span class="flashcard-text">' + escapeHtml(card.front) + '</span>';
+            if (card.frontDiagram) {
+                html += '<div class="flashcard-diagram"><pre class="mermaid">' + card.frontDiagram + '</pre></div>';
+            }
             html += '<span class="flashcard-flip-hint">Click or press Space to flip</span>';
             html += '</div>';
             html += '<div class="flashcard-face flashcard-back">';
             html += '<span class="flashcard-label">Answer</span>';
             html += '<span class="flashcard-text">' + escapeHtml(card.back) + '</span>';
+            if (card.backDiagram) {
+                html += '<div class="flashcard-diagram"><pre class="mermaid">' + card.backDiagram + '</pre></div>';
+            }
             html += '<span class="flashcard-flip-hint">Click or press Space to flip back</span>';
             html += '</div>';
             html += '</div>';
@@ -1380,6 +1423,10 @@
             html += '</div>';
 
             container.innerHTML = html;
+
+            if (container.querySelector('.mermaid')) {
+                mermaid.run({ nodes: container.querySelectorAll('.mermaid') });
+            }
 
             // Event listeners
             $('#flashcard-scene').addEventListener('click', flipCard);
