@@ -384,6 +384,7 @@
             border-radius: var(--radius-sm);
             padding: 16px;
             overflow-x: auto;
+            cursor: zoom-in;
         }
 
         .key-point-diagram .mermaid {
@@ -398,9 +399,44 @@
             padding: 12px;
             overflow-x: auto;
             font-size: 0.85rem;
+            cursor: zoom-in;
         }
 
         .flashcard-diagram .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Diagram Lightbox */
+        .diagram-lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            cursor: zoom-out;
+        }
+
+        .diagram-lightbox.open {
+            display: flex;
+        }
+
+        .diagram-lightbox-content {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 32px;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow: auto;
+            box-shadow: var(--shadow-lg);
+            cursor: default;
+            transform: scale(1.3);
+        }
+
+        .diagram-lightbox-content .mermaid {
             display: flex;
             justify-content: center;
         }
@@ -1139,6 +1175,11 @@
         </section>
     </main>
 
+    <!-- Diagram Lightbox -->
+    <div class="diagram-lightbox" id="diagram-lightbox">
+        <div class="diagram-lightbox-content" id="diagram-lightbox-content"></div>
+    </div>
+
     <!-- ============================================================
          Footer
          ============================================================ -->
@@ -1747,6 +1788,33 @@
             } else if (e.key === ' ' || e.key === 'Spacebar') {
                 e.preventDefault();
                 flipCard();
+            }
+        });
+
+        /* ==============================================================
+           Diagram Lightbox
+           ============================================================== */
+        document.addEventListener('click', function (e) {
+            var diagram = e.target.closest('.key-point-diagram, .flashcard-diagram');
+            if (!diagram) return;
+            e.stopPropagation();
+            var svg = diagram.querySelector('svg');
+            if (!svg) return;
+            var lightbox = $('#diagram-lightbox');
+            var content = $('#diagram-lightbox-content');
+            content.innerHTML = svg.cloneNode(true).outerHTML;
+            lightbox.classList.add('open');
+        });
+
+        $('#diagram-lightbox').addEventListener('click', function (e) {
+            if (!e.target.closest('.diagram-lightbox-content') || e.target.closest('.diagram-lightbox-content') === e.target) {
+                this.classList.remove('open');
+            }
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                $('#diagram-lightbox').classList.remove('open');
             }
         });
 
