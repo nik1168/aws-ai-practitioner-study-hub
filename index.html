@@ -1340,6 +1340,10 @@
                 header.addEventListener('click', function () {
                     var item = this.closest('.accordion-item');
                     item.classList.toggle('open');
+                    if (item.classList.contains('open')) {
+                        var nodes = item.querySelectorAll('.mermaid:not([data-processed])');
+                        if (nodes.length) mermaid.run({ nodes: nodes });
+                    }
                 });
             });
 
