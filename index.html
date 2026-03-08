@@ -793,6 +793,24 @@
             letter-spacing: 0.04em;
         }
 
+        .quiz-next-btn {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 32px;
+            background: var(--orange);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background var(--transition);
+        }
+
+        .quiz-next-btn:hover {
+            background: var(--orange-hover);
+        }
+
         @keyframes slideDown {
             from { opacity: 0; transform: translateY(-8px); }
             to { opacity: 1; transform: translateY(0); }
@@ -1603,14 +1621,18 @@
             feedbackHtml += '<span class="quiz-explanation-label">' + (isCorrect ? '\u2705 Correct!' : '\u274C Incorrect') + '</span>';
             feedbackHtml += escapeHtml(q.explanation);
             feedbackHtml += '</div>';
+
+            // Add "Next Question" button
+            var isLast = state.quizIndex >= state.quizQuestions.length - 1;
+            var nextLabel = isLast ? 'See Results' : 'Next Question \u2192';
+            feedbackHtml += '<button class="quiz-next-btn" id="quiz-next-btn">' + nextLabel + '</button>';
             feedbackEl.innerHTML = feedbackHtml;
 
-            // Auto-advance after 2s
-            setTimeout(function () {
+            $('#quiz-next-btn').addEventListener('click', function () {
                 state.quizIndex++;
                 state.quizSubmitted = false;
                 renderQuizQuestion();
-            }, 2000);
+            });
         }
 
         function renderQuizResults() {
