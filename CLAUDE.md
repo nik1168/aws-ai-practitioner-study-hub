@@ -16,8 +16,10 @@ Single HTML file with embedded CSS/JS. No build tools, no dependencies, no frame
 index.html          — Complete app (HTML + CSS + JS)
 data/domain1.js     — Domain 1 content (summaries, flashcards, quiz questions)
 data/domain2.js     — Domain 2 content (summaries, flashcards, quiz questions)
+data/domain3.js     — Domain 3 content (summaries, flashcards, quiz questions)
 domain_1/           — Source transcript files (17 lessons)
 domain_2/           — Source transcript files (10 lessons)
+domain_3/           — Source transcript files (11 lessons)
 ```
 
 ## Adding a New Domain
@@ -69,3 +71,7 @@ Diagrams use [Mermaid.js](https://mermaid.js.org/) syntax. Common types: `graph 
 - `domain_2/Task_Statement_2.1_Lesson_{1-5}` — Generative AI concepts, transformers, embeddings, diffusion models, use cases, project lifecycle
 - `domain_2/Task_Statement_2.2_Lesson_{1-2}` — Capabilities/limitations, HHH values, interpretability, ROUGE/BLEU metrics, business metrics
 - `domain_2/Task_Statement_2.3_Lesson_{1-2}` — AWS infrastructure, SageMaker JumpStart, Bedrock, Titan, ML stack, security, pricing models
+- `domain_3/Task_Statement_3.1_Lesson_{1-4}` — Foundation model selection, inference parameters, RAG, vector databases, agents
+- `domain_3/Task_Statement_3.2_Lesson_{1-2}` — Prompt engineering techniques, best practices, guardrails, prompt attacks
+- `domain_3/Task_Statement_3.3_Lesson_{1-2}` — Fine-tuning (PEFT, LoRA, ReFT), catastrophic forgetting, data preparation, continuous pre-training
+- `domain_3/Task_Statement_3.4_Lesson_{1-2}` — Evaluation metrics, benchmarks (GLUE, MMLU, BIG-bench, HELM), deployment, application stack
