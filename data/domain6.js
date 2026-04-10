@@ -98,6 +98,97 @@ window.DOMAINS["domain6"] = {
         }
       ]
     }
-    // Remaining task statements (6.2 - 6.7) will be added in subsequent tasks
+    ,
+    // =========================================================================
+    // TASK STATEMENT 6.2 — Vision & Document Processing Services
+    // =========================================================================
+    {
+      id: "6.2",
+      title: "Vision & Document Processing Services",
+      summary: {
+        keyPoints: [
+          { icon: "service", text: "Amazon Rekognition: Image and video analysis service powered by deep learning. Capabilities include object and scene detection, facial analysis (estimates age range, emotions, gender — does NOT identify specific individuals), face comparison (similarity matching between faces), celebrity recognition, content moderation (detecting unsafe, inappropriate, or unwanted content), Custom Labels (train custom models with as few as 10 images for domain-specific detection), text detection in images (signs, banners, license plates), PPE detection (hardhats, face covers, gloves for workplace safety), and streaming video analysis via Amazon Kinesis Video Streams for real-time processing.", diagram: "graph TD\n  INPUT[Image or Video Input] --> REK[Amazon Rekognition]\n  REK --> OBJ[Object & Scene Detection]\n  REK --> FACE[Facial Analysis\nAge, Emotions, Gender]\n  REK --> COMP[Face Comparison\nSimilarity Matching]\n  REK --> CELEB[Celebrity Recognition]\n  REK --> MOD[Content Moderation\nUnsafe/Inappropriate]\n  REK --> CUSTOM[Custom Labels\nMin 10 Training Images]\n  REK --> TEXT[Text Detection\nSigns, Banners, Plates]\n  REK --> PPE[PPE Detection\nHardhats, Masks, Gloves]\n  REK --> VIDEO[Streaming Video\nvia Kinesis Video Streams]\n  style REK fill:#ff9900,color:#fff" },
+          { icon: "service", text: "Amazon Textract: Intelligent document processing service that goes beyond basic OCR. DetectDocumentText extracts raw text lines and words from documents. AnalyzeDocument extracts structured data including forms (key-value pairs) and tables with rows and columns. Queries let you ask natural language questions about a document and get specific answers. Specialized APIs: AnalyzeExpense (invoices and receipts — line items, totals, vendor info), AnalyzeID (driver's licenses, passports — standardized fields), and Lending (mortgage document processing supporting 50+ document types with automatic classification and splitting). Integrates with Amazon Augmented AI (A2I) for human review of low-confidence extractions.", diagram: "graph TD\n  DOC[Document Input\nScanned/Digital] --> TEX[Amazon Textract]\n  TEX --> DETECT[DetectDocumentText\nRaw Text Extraction]\n  TEX --> ANALYZE[AnalyzeDocument\nForms & Tables]\n  TEX --> QUERY[Queries\nAsk Questions About Doc]\n  TEX --> EXPENSE[AnalyzeExpense\nInvoices & Receipts]\n  TEX --> ID[AnalyzeID\nLicenses & Passports]\n  TEX --> LEND[Lending\n50+ Mortgage Doc Types]\n  TEX --> A2I[Amazon A2I\nHuman Review]\n  ANALYZE --> KV[Key-Value Pairs]\n  ANALYZE --> TBL[Tables & Rows]\n  style TEX fill:#ff9900,color:#fff" },
+          { icon: "concept", text: "Selection guide: Use Amazon Rekognition for photos, videos, object detection, facial analysis, face comparison, content moderation, and custom image classification. Use Amazon Textract for scanned documents, forms, tables, invoices, receipts, identity documents, and mortgage processing. Rekognition text detection is optimized for text embedded in real-world images (signs, billboards), while Textract is optimized for structured document text with layout preservation.", diagram: "graph TD\n  NEED{What is your input?}\n  NEED -->|Photos or Videos| REK[Amazon Rekognition]\n  NEED -->|Documents or Forms| TEX[Amazon Textract]\n  REK -->|Objects, Scenes| OBJ[Object Detection]\n  REK -->|Faces| FACE[Facial Analysis/Comparison]\n  REK -->|Safety| MOD[Content Moderation]\n  REK -->|Custom models| CL[Custom Labels]\n  REK -->|Text in images| TXT[Text Detection\nSigns, Billboards]\n  TEX -->|Raw text| DET[DetectDocumentText]\n  TEX -->|Structured data| ANA[AnalyzeDocument\nForms, Tables]\n  TEX -->|Financial docs| EXP[AnalyzeExpense]\n  TEX -->|Identity docs| IDD[AnalyzeID]\n  TEX -->|Mortgage docs| LND[Lending API]\n  style NEED fill:#232f3e,color:#fff\n  style REK fill:#ff9900,color:#fff\n  style TEX fill:#ff9900,color:#fff" }
+        ]
+      },
+      flashcards: [
+        { front: "What is the key difference between Amazon Rekognition and Amazon Textract?", back: "Amazon Rekognition analyzes images and videos (object detection, facial analysis, content moderation, custom labels). Amazon Textract processes documents to extract text, forms, tables, and structured data. Rekognition works with visual/photographic content; Textract works with document content." },
+        { front: "Can Amazon Rekognition identify specific individuals?", back: "No. Rekognition performs facial analysis (estimating age, emotions, gender) and face comparison (determining similarity between two faces), but it does NOT identify specific individuals by name from its own knowledge. Celebrity recognition is a separate feature that matches faces against a known celebrity database." },
+        { front: "What is Amazon Rekognition Custom Labels?", back: "Custom Labels allows you to train a custom image classification or object detection model specific to your use case with as few as 10 training images. It automates the model training pipeline — you only need to provide labeled images, and Rekognition handles the ML infrastructure, training, and deployment." },
+        { front: "What types of content can Amazon Rekognition content moderation detect?", back: "Rekognition content moderation detects unsafe, inappropriate, or unwanted content in images and videos. Categories include explicit/suggestive content, violence, visually disturbing content, drugs, tobacco, alcohol, gambling, hate symbols, and rude gestures. Confidence scores let you set thresholds for your use case." },
+        { front: "What is the difference between DetectDocumentText and AnalyzeDocument in Amazon Textract?", back: "DetectDocumentText performs basic text extraction — it returns raw text lines and words from a document. AnalyzeDocument goes further by understanding document structure, extracting forms as key-value pairs (e.g., 'Name: John Smith') and tables with rows and columns, preserving the logical layout." },
+        { front: "What are Textract Queries?", back: "Queries let you ask natural language questions about a document, and Textract returns the specific answer extracted from the document. For example, you can ask 'What is the patient name?' or 'What is the total amount?' without needing to parse the entire document structure yourself." },
+        { front: "What specialized document types does Amazon Textract support with dedicated APIs?", back: "Three specialized APIs: (1) AnalyzeExpense — invoices and receipts (line items, totals, vendor info, tax). (2) AnalyzeID — identity documents like driver's licenses and passports (standardized field extraction). (3) Lending — mortgage documents supporting 50+ document types with automatic classification, splitting, and extraction." },
+        { front: "How does Amazon Textract integrate with Amazon A2I?", back: "Amazon Textract integrates with Amazon Augmented AI (A2I) to enable human review of low-confidence extractions. When Textract is uncertain about extracted data (below a confidence threshold), the document is routed to human reviewers for verification, ensuring accuracy in critical workflows." },
+        { front: "What does Amazon Rekognition PPE Detection identify?", back: "Rekognition PPE Detection identifies personal protective equipment on persons in images, including face covers (masks), head covers (hardhats/helmets), and hand covers (gloves). It detects both the presence of PPE and whether it is being worn correctly, useful for workplace safety compliance." },
+        { front: "How does Amazon Rekognition handle real-time video analysis?", back: "Rekognition integrates with Amazon Kinesis Video Streams for real-time streaming video analysis. Video is ingested through Kinesis Video Streams, and Rekognition processes frames to detect objects, faces, people, and activities in near real-time, outputting results to Kinesis Data Streams for downstream processing." },
+        { front: "When should you use Rekognition text detection versus Amazon Textract?", back: "Use Rekognition text detection for text embedded in real-world images — signs, billboards, street names, license plates, product packaging. Use Textract for structured documents — scanned forms, PDFs, invoices, receipts — where you need to preserve layout, extract key-value pairs, or parse tables." },
+        { front: "A company needs to automatically process thousands of invoices with varying layouts to extract vendor names, line items, and totals. Which service should they use?", back: "Amazon Textract with the AnalyzeExpense API. AnalyzeExpense is specifically designed for invoices and receipts, automatically identifying and extracting fields like vendor name, line items, quantities, unit prices, totals, and tax amounts — regardless of the document layout or format." }
+      ],
+      quiz: [
+        {
+          question: "A manufacturing company wants to detect product defects on an assembly line using images of products. They have 50 labeled images of defective items and 50 of non-defective items. Which AWS service is most appropriate?",
+          options: ["Amazon Textract with custom queries", "Amazon Rekognition Custom Labels", "Amazon SageMaker with a pre-built algorithm", "Amazon Comprehend image analysis"],
+          correct: 1,
+          explanation: "Amazon Rekognition Custom Labels allows you to train a custom image classification or object detection model with as few as 10 images. With 100 labeled images (50 defective, 50 non-defective), the company can train a custom model to identify manufacturing defects without managing ML infrastructure."
+        },
+        {
+          question: "A bank needs to extract customer names, account numbers, and signatures from thousands of loan application forms that have different layouts across branches. Which AWS service should they use?",
+          options: ["Amazon Rekognition text detection", "Amazon Textract AnalyzeDocument with forms extraction", "Amazon Comprehend entity recognition", "Amazon Translate with custom terminology"],
+          correct: 1,
+          explanation: "Amazon Textract AnalyzeDocument with forms extraction identifies key-value pairs from documents regardless of layout. It can extract structured data like 'Customer Name: Jane Doe' and 'Account Number: 12345' even when form layouts vary across branches."
+        },
+        {
+          question: "A social media platform needs to automatically detect and flag user-uploaded images that contain inappropriate or explicit content before they become visible to other users. Which service should they use?",
+          options: ["Amazon Comprehend sentiment analysis on image metadata", "Amazon Rekognition content moderation", "Amazon Textract to read text in images", "Amazon Macie for content classification"],
+          correct: 1,
+          explanation: "Amazon Rekognition content moderation detects unsafe, inappropriate, or unwanted content in images including explicit/suggestive content, violence, and other categories. Confidence scores allow the platform to set thresholds and automatically flag or remove content."
+        },
+        {
+          question: "A real estate company needs to process mortgage applications that contain property photos, appraisal documents, income verification forms, and tax returns. Which combination of AWS services best addresses all these requirements?",
+          options: ["Amazon Textract Lending API only", "Amazon Rekognition for all documents and photos", "Amazon Rekognition for property photos and Amazon Textract Lending for mortgage documents", "Amazon Comprehend for document classification and entity extraction"],
+          correct: 2,
+          explanation: "Amazon Rekognition handles the property photo analysis (object/scene detection), while Amazon Textract's Lending API is specifically designed for mortgage document processing, supporting 50+ document types with automatic classification, splitting, and data extraction."
+        },
+        {
+          question: "A company needs to verify that a person presenting a photo ID at a kiosk matches the photo on the ID document. Which AWS service and feature should they use?",
+          options: ["Amazon Rekognition facial analysis to estimate age", "Amazon Rekognition face comparison for similarity matching", "Amazon Textract AnalyzeID to read the ID fields", "Amazon Rekognition celebrity recognition"],
+          correct: 1,
+          explanation: "Amazon Rekognition face comparison determines the similarity between two faces — in this case, the live person at the kiosk and the photo on the ID document. It returns a similarity score that the company can use to verify identity. Note that Textract AnalyzeID extracts text fields from IDs but does not compare photos."
+        },
+        {
+          question: "A delivery company wants to automatically read and extract text from street signs, building numbers, and billboards in photos taken by delivery drivers to verify delivery locations. Which service should they use?",
+          options: ["Amazon Textract DetectDocumentText", "Amazon Rekognition text detection", "Amazon Comprehend key phrase extraction", "Amazon Translate to process sign text"],
+          correct: 1,
+          explanation: "Amazon Rekognition text detection is optimized for detecting and reading text embedded in real-world images such as street signs, building numbers, billboards, and license plates. Textract is designed for document processing, not text in photographic/real-world scenes."
+        },
+        {
+          question: "A government agency needs to automatically extract standardized fields (name, date of birth, document number, expiration date) from millions of passports submitted for visa applications. Which service is most appropriate?",
+          options: ["Amazon Rekognition facial analysis on passport photos", "Amazon Textract AnalyzeID", "Amazon Textract DetectDocumentText with custom parsing", "Amazon Comprehend entity recognition"],
+          correct: 1,
+          explanation: "Amazon Textract AnalyzeID is specifically designed for identity documents like passports and driver's licenses. It automatically extracts standardized fields (name, DOB, document number, expiration date) without requiring custom parsing logic."
+        },
+        {
+          question: "Which of the following statements about Amazon Rekognition is correct?",
+          options: ["Rekognition can identify any person by name from a photo", "Rekognition facial analysis provides exact age of a person", "Rekognition face comparison returns a similarity score between two faces", "Rekognition requires at least 1,000 images to train Custom Labels"],
+          correct: 2,
+          explanation: "Rekognition face comparison analyzes two faces and returns a similarity score indicating how likely they are the same person. It does NOT identify individuals by name (only celebrities from its database), provides age RANGES (not exact ages), and Custom Labels requires as few as 10 images."
+        },
+        {
+          question: "A logistics company wants to extract tracking numbers, sender addresses, and delivery dates from shipping labels on packages. The labels are photographed in a warehouse with consistent lighting. Which approach should they use?",
+          options: ["Amazon Rekognition text detection for all fields", "Amazon Textract AnalyzeDocument to extract structured data from the label images", "Amazon Rekognition Custom Labels to classify label types", "Amazon Comprehend entity recognition on OCR output"],
+          correct: 1,
+          explanation: "Amazon Textract AnalyzeDocument is the best choice for extracting structured data (key-value pairs like 'Tracking: ABC123', 'To: Address') from shipping labels. While these are photographed, they are structured documents with consistent fields, making Textract more appropriate than Rekognition text detection."
+        },
+        {
+          question: "A construction company needs to verify that all workers on a job site are wearing required safety equipment (hardhats, safety vests, and gloves) using security camera footage. Which AWS service and feature should they use?",
+          options: ["Amazon Rekognition Custom Labels trained on safety equipment", "Amazon Rekognition PPE Detection", "Amazon Rekognition object detection with default labels", "Amazon SageMaker object detection model"],
+          correct: 1,
+          explanation: "Amazon Rekognition PPE Detection is purpose-built to detect personal protective equipment on persons in images, including head covers (hardhats), face covers (masks), and hand covers (gloves). It identifies both the presence of PPE and whether it is being worn correctly, without requiring custom model training."
+        }
+      ]
+    }
+    // Remaining task statements (6.3 - 6.7) will be added in subsequent tasks
   ]
 };
