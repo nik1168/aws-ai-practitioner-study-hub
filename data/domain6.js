@@ -503,7 +503,114 @@ window.DOMAINS["domain6"] = {
           explanation: "SageMaker Autopilot is AutoML that uniquely generates candidate Jupyter notebooks exposing exactly how each pipeline was built — preprocessing, feature engineering, and training code — which the data scientist can inspect, edit, and rerun. Canvas is no-code and hides the implementation; Bedrock is for foundation models, not tabular AutoML; Ground Truth is for labeling."
         }
       ]
+    },
+    {
+      id: "6.6",
+      title: "Data Preparation & Human Review Services",
+      summary: {
+        keyPoints: [
+          {
+            icon: "service",
+            text: "AWS Glue — Serverless ETL service. Key components: (1) Glue Crawlers automatically discover schemas from S3, RDS, Redshift, DynamoDB and populate metadata; (2) Glue Data Catalog — central metadata repository used by Athena, EMR, Redshift Spectrum, and Glue jobs; (3) Glue Jobs — Spark-based transforms (Python/Scala); (4) Glue Studio — visual drag-and-drop ETL builder; (5) Glue Data Quality — rule-based validation of datasets. Pay-per-use, auto-scales.",
+            diagram: "graph LR\n  S3[(S3 / RDS / Redshift)] --> C[Glue Crawler]\n  C --> DC[Glue Data Catalog]\n  DC --> J[Glue Job Spark ETL]\n  J --> T[(Transformed Data)]\n  DC --> A[Athena / EMR / Redshift Spectrum]\n  J --> DQ[Glue Data Quality Rules]"
+          },
+          {
+            icon: "service",
+            text: "AWS Glue DataBrew — Visual no-code data preparation tool targeted at data analysts and business users. 250+ built-in transformations (clean, normalize, filter, join, pivot, handle missing values, format dates). Data profiling surfaces stats, distributions, correlations, and anomalies. Data quality rules enforce constraints. Recipe-based: transformation steps are saved, shared, reused, and applied to new data. Connects to S3, Redshift, RDS, and the Glue Data Catalog."
+          },
+          {
+            icon: "service",
+            text: "Amazon A2I (Augmented AI) — Human review workflows for ML predictions. Built-in integrations with Amazon Textract (review extracted document fields) and Amazon Rekognition (review content moderation flags). Custom task types allow human review of any ML model's output. Workforce options: Amazon Mechanical Turk (public), private workforce (your employees), or third-party vendors. Provides built-in review UI templates plus custom Liquid HTML templates. Activation conditions (e.g., confidence below a threshold) route only low-confidence predictions to humans.",
+            diagram: "graph LR\n  M[ML Prediction Textract/Rekognition/Custom] --> AC{Confidence < threshold?}\n  AC -- No --> AUTO[Auto-accept result]\n  AC -- Yes --> A2I[A2I Human Review Loop]\n  A2I --> W[Workforce: MTurk / Private / Vendor]\n  W --> R[Reviewed Result]\n  R --> DS[(Downstream App / Training Data)]"
+          },
+          {
+            icon: "service",
+            text: "Amazon Macie — S3 data security and privacy service. Uses ML and pattern matching to automatically discover sensitive data. Managed data identifiers cover 100+ types (SSN, credit card numbers, passport numbers, API keys, names, addresses). Custom data identifiers use regex for organization-specific patterns (e.g., employee IDs). Produces two finding types: (1) Policy findings — bucket configuration issues like public access or disabled encryption; (2) Sensitive data findings — PII or secrets detected inside objects. Integrates with AWS Security Hub and Amazon EventBridge for automated response.",
+            diagram: "graph LR\n  S3[(S3 Buckets)] --> MACIE[Amazon Macie]\n  MACIE --> MID[Managed Identifiers 100+ types]\n  MACIE --> CID[Custom Identifiers regex]\n  MACIE --> PF[Policy Findings: bucket config]\n  MACIE --> SF[Sensitive Data Findings: PII]\n  PF --> SH[Security Hub]\n  SF --> EB[EventBridge]\n  EB --> L[Lambda remediation]"
+          },
+          {
+            icon: "concept",
+            text: "Selection guide — ETL pipelines & central metadata catalog for engineers: AWS Glue. Visual no-code data cleaning & profiling for analysts: Glue DataBrew. Human-in-the-loop review of ML predictions (post-deployment): Amazon A2I. Discovering sensitive data (PII, secrets, credentials) in S3: Amazon Macie. Remember: Ground Truth is for labeling data BEFORE training; A2I is for reviewing predictions AFTER deployment."
+          }
+        ]
+      },
+      flashcards: [
+        { front: "What is the difference between AWS Glue and Glue DataBrew?", back: "Glue is a code-based (Spark/Python) serverless ETL service for data engineers, with crawlers, a data catalog, and jobs. DataBrew is a visual no-code data preparation tool for analysts, offering 250+ point-and-click transformations, data profiling, and reusable recipes. Both are serverless and integrate with S3/Redshift/RDS and the Glue Data Catalog." },
+        { front: "What is the AWS Glue Data Catalog?", back: "A central, persistent metadata repository that stores table definitions, schemas, and partitions for data across S3, RDS, Redshift, and more. It is used by Athena, EMR, Redshift Spectrum, and Glue jobs as a unified 'source of truth' for where data lives and what it looks like." },
+        { front: "What do AWS Glue Crawlers do?", back: "They automatically connect to data sources (S3, RDS, Redshift, DynamoDB, JDBC), infer schemas and data types, detect partitions and file formats, and register/update tables in the Glue Data Catalog — eliminating manual schema definition." },
+        { front: "What is a DataBrew recipe?", back: "A saved, ordered sequence of transformation steps (e.g., remove duplicates, fill missing values, reformat dates, rename columns). Recipes are versioned, shareable, and can be re-applied to new datasets — making data prep reproducible without rewriting logic." },
+        { front: "What is Amazon A2I?", back: "Amazon Augmented AI — a service that implements human review workflows for ML predictions. It ships with built-in integrations for Textract and Rekognition, supports custom task types for any model, and lets you choose Mechanical Turk, a private workforce, or a third-party vendor as reviewers." },
+        { front: "How does A2I decide which predictions to send to humans?", back: "Via activation conditions (filters) — typically a confidence threshold. For example, 'if Textract confidence < 85%, send to human review'. Only predictions that trigger the condition are routed to a reviewer; the rest are auto-accepted, keeping human cost low." },
+        { front: "Which AWS AI services have built-in A2I integrations?", back: "Amazon Textract (review low-confidence extracted form fields and tables) and Amazon Rekognition (review content moderation flags). Any other model can also be wired up via A2I custom task types." },
+        { front: "What is Amazon Macie?", back: "A managed data security service that uses ML and pattern matching to discover, classify, and protect sensitive data stored in Amazon S3 — including PII like SSNs, credit card numbers, names, addresses, and credentials like API keys." },
+        { front: "Managed vs custom data identifiers in Macie?", back: "Managed identifiers are 100+ AWS-provided detectors for common sensitive data (SSN, credit cards, passport numbers, API keys, names, addresses). Custom identifiers use your own regex patterns to detect organization-specific formats (e.g., employee IDs like EMP-12345-AB, internal project codes)." },
+        { front: "What are the two Macie finding types?", back: "(1) Policy findings — S3 bucket configuration issues (public access, disabled encryption, disabled logging, policy changes). (2) Sensitive data findings — actual PII or secrets discovered inside objects. Both can be routed to Security Hub and EventBridge for automated response." },
+        { front: "What is AWS Glue Data Quality?", back: "A feature of AWS Glue that lets you define rules (e.g., column must not be null, values must fall within a range, row counts must be consistent) and automatically validate datasets against them — surfacing bad data before it enters downstream pipelines." },
+        { front: "Ground Truth vs A2I — key difference?", back: "SageMaker Ground Truth is for labeling raw data BEFORE training (building a training set). Amazon A2I is for reviewing model predictions AFTER deployment (validating inference on live data). Both use similar workforce options, but they operate at opposite ends of the ML lifecycle." }
+      ],
+      quiz: [
+        {
+          question: "A company dumps raw CSV and JSON files into S3 daily. A data engineering team needs to automatically discover the schema of these files, register them in a central catalog that Athena can query, and then run Spark-based ETL transformations. Which AWS service is the best fit?",
+          options: ["AWS Glue DataBrew", "Amazon Macie", "AWS Glue (Crawlers + Data Catalog + Jobs)", "Amazon A2I"],
+          correct: 2,
+          explanation: "AWS Glue is the all-in-one serverless ETL service: Glue Crawlers auto-discover schemas in S3, the Glue Data Catalog registers tables queryable by Athena and Redshift Spectrum, and Glue Jobs run Spark-based transforms. DataBrew is visual no-code (not Spark ETL), Macie detects sensitive data, and A2I is for human review of predictions."
+        },
+        {
+          question: "A business analyst with no coding skills needs to clean a CSV of customer records: remove duplicates, fill missing values, standardize date formats, and profile the data distribution. They also want to reapply the same cleaning steps to new files next month. What should they use?",
+          options: ["AWS Glue Jobs with PySpark", "AWS Glue DataBrew with a saved recipe", "Amazon EMR with Jupyter notebooks", "Amazon Athena with SQL"],
+          correct: 1,
+          explanation: "Glue DataBrew is the visual, no-code data prep service for analysts — it offers 250+ point-and-click transformations, data profiling, and saves the sequence of steps as a recipe that can be re-applied to new data. Glue Jobs and EMR require code; Athena is for querying, not cleaning."
+        },
+        {
+          question: "An insurance company uses Amazon Textract to extract fields from claim forms. Any field with extraction confidence below 85% must be verified by a human claims adjuster before the claim is processed. What is the simplest way to implement this?",
+          options: ["Write a Lambda function that emails low-confidence extractions to adjusters", "Use Amazon A2I with the built-in Textract integration and a confidence threshold activation condition", "Retrain the Textract model on company-specific data", "Pipe all extractions into Ground Truth for labeling"],
+          correct: 1,
+          explanation: "Amazon A2I has a built-in integration with Textract specifically for this use case. You configure an activation condition (confidence < 85%) and A2I automatically routes only low-confidence extractions to your private workforce (the adjusters) via a review UI. Ground Truth is for labeling training data, not post-deployment review."
+        },
+        {
+          question: "A compliance team is worried that some S3 buckets may contain customer credit card numbers and Social Security Numbers that shouldn't be there. They want an automated, ML-based scan across all buckets to discover and report on sensitive data. Which service should they use?",
+          options: ["AWS Config", "Amazon Macie", "AWS Glue DataBrew profiling", "Amazon Inspector"],
+          correct: 1,
+          explanation: "Amazon Macie is purpose-built for discovering and classifying sensitive data in S3 using ML and managed data identifiers that detect 100+ types including credit cards and SSNs. Config tracks resource configuration changes, Inspector scans EC2/containers for vulnerabilities, and DataBrew profiling gives statistics but is not a security/PII discovery service."
+        },
+        {
+          question: "A company's employee IDs follow a custom format: 'EMP-' followed by 5 digits, a hyphen, and 2 letters (e.g., EMP-12345-AB). They want Amazon Macie to flag objects containing these IDs. How should they configure this?",
+          options: ["Use a managed data identifier for employee IDs", "Create a custom data identifier with a regex pattern", "Train a SageMaker model and deploy via Macie", "Use Amazon A2I to label employee IDs"],
+          correct: 1,
+          explanation: "Managed data identifiers only cover ~100+ standard types (SSN, credit cards, etc.) and do not include organization-specific formats. For custom patterns like an internal employee ID, Macie supports custom data identifiers defined by a regex — this is the intended mechanism. A2I is for human review, not data discovery."
+        },
+        {
+          question: "Which statement best distinguishes SageMaker Ground Truth from Amazon A2I?",
+          options: ["Ground Truth is for computer vision; A2I is for NLP", "Ground Truth labels training data before model training; A2I reviews model predictions after deployment", "Ground Truth uses Mechanical Turk; A2I does not support external workforces", "Ground Truth is serverless; A2I requires EC2 instances"],
+          correct: 1,
+          explanation: "The defining difference is the lifecycle stage: Ground Truth creates labeled datasets BEFORE training, while A2I reviews live predictions AFTER deployment. Both support similar workforce options (MTurk, private, vendor) and both are managed services — the other choices mix or invert capabilities."
+        },
+        {
+          question: "A DataBrew user has designed a sequence of 15 transformation steps to clean a monthly sales file. They want to apply the identical steps to next month's file (and every month after) without redoing the work. Which DataBrew feature enables this?",
+          options: ["Data profiles", "Recipes", "Data quality rules", "Crawlers"],
+          correct: 1,
+          explanation: "A DataBrew recipe is a saved, ordered sequence of transformation steps that can be re-applied to new datasets — making data prep repeatable and shareable. Profiles produce statistics, quality rules validate data, and crawlers are a Glue feature (not DataBrew) for schema discovery."
+        },
+        {
+          question: "A social platform uses Amazon Rekognition for content moderation, but borderline cases (confidence 50–80%) need a human to make the final call. What is the lowest-effort way to build this human review step?",
+          options: ["Write a custom Lambda + SQS + internal web app from scratch", "Use Amazon A2I with the built-in Rekognition integration", "Switch to SageMaker Ground Truth", "Use Amazon Comprehend moderation instead"],
+          correct: 1,
+          explanation: "A2I has a built-in Rekognition integration specifically for content moderation review. You set an activation condition (e.g., 50% < confidence < 80%) and A2I handles routing, UI, and workforce management out of the box — far less effort than building a custom pipeline. Ground Truth is for pre-training labeling; Comprehend is for text, not image moderation."
+        },
+        {
+          question: "An organization wants a single metadata repository describing all their S3-based tables so that Athena, EMR, and Redshift Spectrum can all query them without each tool maintaining its own schema definitions. What should they use?",
+          options: ["Amazon Macie", "AWS Glue Data Catalog", "AWS Glue DataBrew", "Amazon A2I"],
+          correct: 1,
+          explanation: "The AWS Glue Data Catalog is the canonical central metadata store used by Athena, EMR, and Redshift Spectrum — exactly the 'one catalog, many engines' pattern described. Macie is for sensitive data discovery, DataBrew is a visual prep tool, and A2I is for human review."
+        },
+        {
+          question: "Macie reports two issues on the same S3 bucket: (A) the bucket is publicly accessible, and (B) objects inside contain customer email addresses. How would Macie categorize each finding?",
+          options: ["Both are Sensitive data findings", "Both are Policy findings", "(A) is a Policy finding; (B) is a Sensitive data finding", "(A) is a Sensitive data finding; (B) is a Policy finding"],
+          correct: 2,
+          explanation: "Macie produces two finding types. Policy findings flag bucket-level configuration issues (like public access, disabled encryption, or disabled logging) — that's (A). Sensitive data findings flag PII or secrets discovered inside object contents (like emails, SSNs, credit cards) — that's (B)."
+        }
+      ]
     }
-    // Remaining task statements (6.6 - 6.7) will be added in subsequent tasks
+    // Remaining task statement (6.7) will be added in the next task
   ]
 };
