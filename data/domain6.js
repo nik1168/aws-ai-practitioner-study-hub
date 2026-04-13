@@ -610,7 +610,208 @@ window.DOMAINS["domain6"] = {
           explanation: "Macie produces two finding types. Policy findings flag bucket-level configuration issues (like public access, disabled encryption, or disabled logging) — that's (A). Sensitive data findings flag PII or secrets discovered inside object contents (like emails, SSNs, credit cards) — that's (B)."
         }
       ]
+    },
+    {
+      id: "6.7",
+      title: "Specialized & Emerging AI Services",
+      summary: {
+        keyPoints: [
+          {
+            icon: "service",
+            text: "AWS HealthLake: HIPAA-eligible FHIR R4 data store that ingests, transforms, and stores healthcare data in the FHIR interoperability standard. Built-in NLP extracts medical entities (conditions, medications, procedures, anatomy) from unstructured clinical notes. Integrates with Athena and QuickSight for analytics and BI. Use cases: patient 360 view, clinical trial matching, population health management.",
+            diagram: "graph LR\n  A[EHR Systems] --> B[HealthLake FHIR R4 Store]\n  C[Clinical Notes] --> B\n  B --> D[NLP Entity Extraction]\n  D --> E[Conditions/Meds/Procedures]\n  B --> F[Athena/QuickSight]\n  F --> G[Analytics & Insights]"
+          },
+          {
+            icon: "service",
+            text: "Amazon Q Developer (formerly CodeWhisperer): AI coding assistant that generates code from comments and context. Real-time IDE suggestions in VS Code, JetBrains, and others. Security scanning detects SQL injection, XSS, and hardcoded credentials. Reference tracking flags open-source code matches with license info. Code transformation (e.g., Java 8 to 17). CLI integration. Supports 15+ languages. Free tier available for individuals."
+          },
+          {
+            icon: "service",
+            text: "AWS DeepRacer: Reinforcement learning educational platform. Write Python reward functions to train a virtual 1/18 scale autonomous car in a 3D racing simulator. Deploy trained models to a physical car. Global community racing leagues. Teaches core RL concepts: agents, environments, states, actions, and rewards in a hands-on way.",
+            diagram: "graph LR\n  A[Python Reward Function] --> B[RL Training]\n  B --> C[3D Simulator]\n  C --> D[Trained Model]\n  D --> E[Physical 1/18 Car]\n  D --> F[Virtual Racing League]"
+          },
+          {
+            icon: "service",
+            text: "Amazon Lookout for Metrics: Automated anomaly detection for business metrics like revenue, page views, and conversion rates. Connects to 19+ data sources (S3, CloudWatch, RDS, Redshift, Salesforce, etc.). Automatic root cause analysis identifies contributing dimensions (product, region, channel). Severity-ranked alerts. No ML expertise required.",
+            diagram: "graph LR\n  A[S3/RDS/Redshift/Salesforce] --> B[Lookout for Metrics]\n  B --> C[Anomaly Detection]\n  C --> D[Root Cause Analysis]\n  D --> E[Contributing Dimensions]\n  C --> F[Severity-Ranked Alerts]"
+          },
+          {
+            icon: "service",
+            text: "Amazon Lookout for Equipment: Predictive maintenance using sensor data (temperature, pressure, vibration). Automatically builds ML models to detect abnormal equipment behavior before failure. Use cases: bearing failures, motor overheating, compressor anomalies. Integrates with AWS IoT SiteWise for industrial data collection."
+          },
+          {
+            icon: "service",
+            text: "Amazon Lookout for Vision: Computer vision for visual inspection and defect detection in manufacturing. Train with as few as 30 labeled images. Detects scratches, dents, cracks, missing components, and color defects. Supports edge deployment via AWS Panorama for low-latency, offline inspection on the factory floor."
+          },
+          {
+            icon: "concept",
+            text: "Selection guide: Healthcare interoperability -> HealthLake. Code generation/help -> Q Developer. Learn reinforcement learning -> DeepRacer. Business KPI anomalies -> Lookout for Metrics. Equipment predictive maintenance -> Lookout for Equipment. Visual/defect inspection -> Lookout for Vision.",
+            diagram: "graph TD\n  A[What's the use case?] --> B{Domain?}\n  B -->|Healthcare FHIR| C[HealthLake]\n  B -->|Developer productivity| D[Q Developer]\n  B -->|Learn RL| E[DeepRacer]\n  B -->|Business metrics anomalies| F[Lookout for Metrics]\n  B -->|Equipment sensors| G[Lookout for Equipment]\n  B -->|Visual defect detection| H[Lookout for Vision]"
+          }
+        ]
+      },
+      flashcards: [
+        {
+          front: "What is AWS HealthLake?",
+          back: "A HIPAA-eligible managed service that ingests, transforms, and stores healthcare data in the FHIR R4 interoperability standard. Built-in NLP extracts medical entities from unstructured clinical notes, and data can be queried via Athena and visualized in QuickSight."
+        },
+        {
+          front: "What is the FHIR R4 format and why does HealthLake use it?",
+          back: "FHIR (Fast Healthcare Interoperability Resources) R4 is the industry standard for exchanging healthcare data between EHR systems. HealthLake stores data in FHIR R4 so records from different EHRs can be consolidated into a single, interoperable format for analytics and patient 360 views."
+        },
+        {
+          front: "What is Q Developer reference tracking?",
+          back: "A feature that flags code suggestions which match open-source training data, showing the source repository and license. This helps developers comply with open-source licenses (e.g., Apache 2.0, MIT, GPL) before accepting a suggestion."
+        },
+        {
+          front: "When should you use Q Developer vs Bedrock for code generation?",
+          back: "Q Developer: purpose-built coding assistant with IDE integration, security scanning, reference tracking, and code transformation. Bedrock: general-purpose foundation model access — use it when you need to embed code generation inside a custom application or combine it with other FM capabilities."
+        },
+        {
+          front: "What is AWS DeepRacer?",
+          back: "An educational reinforcement learning platform. You write a Python reward function to train a virtual 1/18 scale autonomous race car in a 3D simulator, then optionally deploy the trained model to a physical car or compete in global racing leagues."
+        },
+        {
+          front: "How do you differentiate the three Lookout services?",
+          back: "Lookout for Metrics: anomaly detection on business KPIs (revenue, conversion). Lookout for Equipment: predictive maintenance from industrial sensor data. Lookout for Vision: computer vision defect detection on images. Each targets a different data type and domain."
+        },
+        {
+          front: "What is Amazon Lookout for Metrics?",
+          back: "An automated anomaly detection service for business metrics. It connects to 19+ data sources (S3, CloudWatch, RDS, Redshift, Salesforce), detects anomalies, and performs automatic root cause analysis to identify the dimensions (product, region, channel) driving the anomaly."
+        },
+        {
+          front: "How does Lookout for Equipment work?",
+          back: "It ingests time-series sensor data (temperature, pressure, vibration, etc.) from industrial equipment, automatically builds ML models of normal behavior, and alerts when abnormal patterns emerge — enabling predictive maintenance before failures occur. Integrates with AWS IoT SiteWise."
+        },
+        {
+          front: "What is Amazon Lookout for Vision?",
+          back: "A computer vision service for visual inspection and defect detection in manufacturing. Trains with as few as 30 labeled images and identifies scratches, dents, cracks, missing components, and color defects. Supports edge deployment via AWS Panorama."
+        },
+        {
+          front: "What is AWS Panorama?",
+          back: "An edge computing appliance and SDK that runs computer vision models on-premises for low-latency, offline inspection. Commonly paired with Lookout for Vision so factories can perform real-time defect detection without round-tripping images to the cloud."
+        },
+        {
+          front: "What does Q Developer security scanning detect?",
+          back: "Common vulnerabilities such as SQL injection, cross-site scripting (XSS), hardcoded credentials/secrets, insecure cryptography, and other OWASP-style issues — flagged inline as you code, with suggested fixes."
+        },
+        {
+          front: "Which service consolidates records from multiple EHR systems into one queryable store?",
+          back: "AWS HealthLake. It normalizes data from different EHRs into the FHIR R4 standard, runs NLP on clinical notes to extract structured entities, and exposes the combined data via Athena/QuickSight for patient 360 and population-health analytics."
+        }
+      ],
+      quiz: [
+        {
+          question: "A hospital is consolidating patient records from three different EHR systems to build an analytics platform. They need FHIR-standard storage, NLP on clinical notes, and HIPAA compliance. Which service should they use?",
+          options: [
+            "Amazon Comprehend Medical alone",
+            "AWS HealthLake",
+            "Amazon Textract",
+            "Amazon Lookout for Metrics"
+          ],
+          correct: 1,
+          explanation: "AWS HealthLake is the purpose-built, HIPAA-eligible service for storing healthcare data in FHIR R4, with built-in medical NLP and Athena/QuickSight integration. Comprehend Medical only extracts entities; HealthLake provides the full data store + analytics pipeline."
+        },
+        {
+          question: "An online retailer notices a sudden drop in checkout conversions and needs to automatically identify which product categories, regions, or marketing channels are driving the anomaly. Which service fits best?",
+          options: [
+            "Amazon Lookout for Equipment",
+            "Amazon Lookout for Vision",
+            "Amazon Lookout for Metrics",
+            "AWS DeepRacer"
+          ],
+          correct: 2,
+          explanation: "Lookout for Metrics detects anomalies in business KPIs and performs automatic root cause analysis across dimensions like product, region, and channel — exactly the retailer's need. The other Lookout services target equipment sensors and visual defects."
+        },
+        {
+          question: "A manufacturer needs real-time defect detection on a factory floor with unreliable internet. Images must be processed on-premises for sub-second latency. Which combination is best?",
+          options: [
+            "Lookout for Vision with AWS Panorama at the edge",
+            "Rekognition Custom Labels in the cloud",
+            "SageMaker real-time endpoint",
+            "Lookout for Equipment with IoT SiteWise"
+          ],
+          correct: 0,
+          explanation: "Lookout for Vision handles visual defect detection, and AWS Panorama provides the edge appliance/SDK to run the model on-premises with low latency and no cloud dependency. Cloud-only options fail the latency/connectivity requirement."
+        },
+        {
+          question: "A developer wants to learn reinforcement learning concepts through a hands-on, gamified experience. Which AWS service is designed for this?",
+          options: [
+            "SageMaker RL",
+            "AWS DeepRacer",
+            "Amazon Bedrock",
+            "Amazon Q Developer"
+          ],
+          correct: 1,
+          explanation: "DeepRacer is the educational RL platform: write a Python reward function, train a virtual 1/18 car in a 3D simulator, and compete in leagues. SageMaker RL is a production toolkit, not an educational gamified experience."
+        },
+        {
+          question: "A factory has 50 industrial compressors streaming temperature, pressure, and vibration sensor data. They want to predict failures before they happen. Which service is the best fit?",
+          options: [
+            "Amazon Lookout for Vision",
+            "Amazon Lookout for Metrics",
+            "Amazon Lookout for Equipment",
+            "Amazon Monitron only"
+          ],
+          correct: 2,
+          explanation: "Lookout for Equipment ingests multi-sensor time-series data and auto-builds models to detect abnormal equipment behavior for predictive maintenance. Vision is for images; Metrics is for business KPIs."
+        },
+        {
+          question: "Q Developer flags a suggested code block as matching an Apache 2.0 licensed open-source project. What is the recommended action?",
+          options: [
+            "Reject the suggestion — any open-source match is disallowed",
+            "Accept it silently; Apache 2.0 is permissive",
+            "Review the license terms and attribute the source if your organization's policy requires it",
+            "Disable reference tracking to avoid future warnings"
+          ],
+          correct: 2,
+          explanation: "Reference tracking exists so you can make an informed licensing decision. Apache 2.0 is permissive but typically requires attribution — follow your org's open-source policy. Disabling the warning defeats the purpose of compliance tracking."
+        },
+        {
+          question: "Which statement about Amazon Lookout for Vision is correct?",
+          options: [
+            "It requires at least 10,000 labeled images to start training",
+            "It can be trained with as few as 30 labeled images and supports edge deployment via AWS Panorama",
+            "It only works for text recognition, not visual defects",
+            "It replaces AWS HealthLake for medical imaging"
+          ],
+          correct: 1,
+          explanation: "Lookout for Vision is designed for low-data visual inspection — as few as ~30 labeled images — and supports edge deployment via AWS Panorama for on-premises inference."
+        },
+        {
+          question: "A global retailer sees a revenue drop in APAC and wants to automatically identify which products, customer segments, and sales channels are driving it. Which service provides automatic root cause analysis across dimensions?",
+          options: [
+            "Amazon QuickSight",
+            "Amazon Lookout for Metrics",
+            "Amazon Forecast",
+            "Amazon Personalize"
+          ],
+          correct: 1,
+          explanation: "Lookout for Metrics not only detects anomalies but performs automatic root cause analysis, ranking the contributing dimensions (product, segment, channel) by impact. QuickSight visualizes data but doesn't do automated anomaly RCA out of the box."
+        },
+        {
+          question: "Which AWS service is HIPAA-eligible and stores data in the FHIR R4 interoperability standard?",
+          options: [
+            "Amazon Comprehend",
+            "Amazon Textract",
+            "AWS HealthLake",
+            "Amazon Lookout for Metrics"
+          ],
+          correct: 2,
+          explanation: "AWS HealthLake is the HIPAA-eligible service that uses FHIR R4 as its native storage format, enabling interoperability across EHR systems."
+        },
+        {
+          question: "A team is upgrading a large Java 8 codebase to Java 17 and wants to automate the refactoring. Which service is purpose-built for this?",
+          options: [
+            "Amazon Q Developer (code transformation)",
+            "AWS DeepRacer",
+            "Amazon Bedrock with Titan",
+            "AWS HealthLake"
+          ],
+          correct: 0,
+          explanation: "Q Developer includes a code transformation capability that automates migrations such as Java 8 to Java 17, updating dependencies, APIs, and syntax at scale. The other services are unrelated to Java modernization."
+        }
+      ]
     }
-    // Remaining task statement (6.7) will be added in the next task
   ]
 };
